@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Insert title here</title>
+<!-- <base> 标签为页面上的所有链接规定默认地址或默认目标。必须位于head元素内部 -->
+<base href="/OA/">
+</head>
+<body>
+	<a href="html/ask.html">我要提问</a>
+
+	<table id="content">
+		<tr>
+			<td>序号</td>
+			<td>问题</td>
+			<td>回答次数</td>
+			<td>最后修改</td>
+		</tr>
+
+	</table>
+	<script src="js/jquery-1.8.2.min.js"></script>
+	<script>
+		//文档就绪时触发
+		$(function() {
+			getAllQuestions();
+		})
+		
+		function getAllQuestions(){
+			alert("发送请求");
+			$.ajax({
+				url:"getQuestions",
+				type:"post",
+				dataType:"json",
+				 contentType:'application/x-www-form-urlencoded;charset=UTF-8',
+				success:function(result){
+					alert("返回结果");
+					for(var i=0;i<result.length;i++){
+						if(i%2==0){
+						var tr=$("<tr style='background-color:gray'></tr>");
+						}else{
+						var tr=$("<tr style='background-color:white'></tr>");
+						}
+						
+						var a=$("<a id='link"+i+"'></a>").text(result[i].title); 
+						var td1 =$("<td></td>").text(i+1);
+						var td2 =$("<td></td>");
+						var td3 =$("<td></td>").text(result[i].answerCount);
+						var td4 =$("<td></td>").text(result[i].lastModified);
+						tr.append(td1);
+						td2.append(a); 				
+		 				tr.append(td2);
+						tr.append(td3);
+						tr.append(td4);
+
+						$("#content").append(tr);
+						$("#link"+i+"").attr("href","html/answer.html?id="+result[i].id+""); 										
+					}				
+				}			
+			})
+		}
+		
+	</script>
+</body>
+</html>

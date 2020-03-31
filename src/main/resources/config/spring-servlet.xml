@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- 注解驱动 -->
+   <mvc:annotation-driven/> 
+
+    <!-- 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    </bean>
+    
+	<!-- 组件扫描器 -->
+ 	<context:component-scan base-package="com.project.*"/>
+ 
+	<!-- 创建一个jackson解析器 -->
+   	<bean id="jackson" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+  		<property name="supportedMediaTypes">
+  			<list>
+  				<value>application/json;charset=utf-8</value>
+  				<value>text/html;charset=utf-8</value>
+  				<value>text/json;charset=utf-8</value>
+  			</list>
+  		</property>
+  	</bean>  
+  			<!-- 组件扫描器:扫描服务层(service) ,扫接口，自动扫实现类-->
+<!--  		<context:component-scan base-package="com.project.service"/> 
+ -->  	
+	<!-- 设置一个默认的servlet来处理静态资源 -->
+  	<mvc:default-servlet-handler />
+  	
+</beans>

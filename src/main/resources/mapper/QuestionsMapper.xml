@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.dao.QuestionsMapper">
+	<resultMap id="BaseResultMap"
+		type="com.project.pojo.Questions">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="detailDesc" jdbcType="VARCHAR"
+			property="detaildesc" />
+		<result column="answerCount" jdbcType="INTEGER"
+			property="answercount" />
+		<result column="lastModified" jdbcType="DATE"
+			property="lastmodified" />
+	</resultMap>
+	<!-- 一对多 -->
+	<resultMap type="com.project.pojo.Questions" id="" OneToMany ">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="detailDesc" jdbcType="VARCHAR"
+			property="detaildesc" />
+		<result column="answerCount" jdbcType="INTEGER"
+			property="answercount" />
+		<result column="lastModified" jdbcType="DATE"
+			property="lastmodified" />
+		<!-- collection标签用于返回多个对象 -->
+		<!-- property:POJO类中对应属性的名字 ofType:list属性存放元素的类型 -->
+		<collection property="answers"
+			ofType="com.project.pojo.Answers">
+			<!-- 配置元素的字段、属性的映射 -->
+			<id column="id" jdbcType="INTEGER" property="id" />
+    		<result column="ansContent" jdbcType="VARCHAR" property="anscontent" />
+    		<result column="ansDate" jdbcType="DATE" property="ansdate" />
+   			<result column="qid" jdbcType="INTEGER" property="qid" />
+		</collection>
+	</resultMap>
+	<select id="selectAllQuestion" resultMap="OneToMany">
+		select * from questions
+	</select>
+
+	<sql id="Base_Column_List">
+		id, title, detailDesc, answerCount, lastModified
+	</sql>
+	<select id="selectByPrimaryKey"
+		parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from questions
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from questions
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.project.pojo.Questions">
+		insert into questions (id, title, detailDesc,
+		answerCount, lastModified)
+		values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+		#{detaildesc,jdbcType=VARCHAR},
+		#{answercount,jdbcType=INTEGER}, #{lastmodified,jdbcType=DATE})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.project.pojo.Questions">
+		insert into questions
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="detaildesc != null">
+				detailDesc,
+			</if>
+			<if test="answercount != null">
+				answerCount,
+			</if>
+			<if test="lastmodified != null">
+				lastModified,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="detaildesc != null">
+				#{detaildesc,jdbcType=VARCHAR},
+			</if>
+			<if test="answercount != null">
+				#{answercount,jdbcType=INTEGER},
+			</if>
+			<if test="lastmodified != null">
+				#{lastmodified,jdbcType=DATE},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.project.pojo.Questions">
+		update questions
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="detaildesc != null">
+				detailDesc = #{detaildesc,jdbcType=VARCHAR},
+			</if>
+			<if test="answercount != null">
+				answerCount = #{answercount,jdbcType=INTEGER},
+			</if>
+			<if test="lastmodified != null">
+				lastModified = #{lastmodified,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.project.pojo.Questions">
+		update questions
+		set title = #{title,jdbcType=VARCHAR},
+		detailDesc = #{detaildesc,jdbcType=VARCHAR},
+		answerCount = #{answercount,jdbcType=INTEGER},
+		lastModified = #{lastmodified,jdbcType=DATE}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
